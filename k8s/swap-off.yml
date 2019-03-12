@@ -1,0 +1,14 @@
+---
+- hosts: k8s
+  gather_facts: false
+  become: yes
+  become_user: root
+  tasks:
+    - name: disable swap
+      shell: /sbin/swapoff -a
+
+    - name: take swap out of fstab
+      replace: 
+        dest: /etc/fstab
+        regexp: '(.*swap.*)'
+        replace: '#\1'
