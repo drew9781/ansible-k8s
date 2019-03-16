@@ -1,7 +1,12 @@
 ---
-- name: install docker
+- name: install docker.io
   apt:
     name: docker.io
+  become: yes
+
+- name: install docker
+  apt:
+    name: docker
   become: yes
 
 - name: install HTTPS supoort
