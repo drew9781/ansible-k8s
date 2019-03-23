@@ -1,0 +1,9 @@
+---
+- name: installing k8s
+  import_playbook: k8s.yml
+
+- name: Setting up master
+  import_playbook: k8s-master.yml
+
+- name: setting up workers
+  import_playbook: k8s-client.yml
