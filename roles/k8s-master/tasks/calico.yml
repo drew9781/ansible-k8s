@@ -1,6 +1,6 @@
 ---
 - name: kubeadm init
-  shell: kubeadm init --pod-network-cidr=192.168.0.0/16
+  shell: kubeadm init --pod-network-cidr=10.0.0.0/8
   become: yes
 
 - name: set up kubeadm for non-root
