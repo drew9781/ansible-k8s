@@ -1,4 +1,4 @@
 ---
-- hosts: clone1
+- hosts: k8smaster
   roles:
     - k8s-master

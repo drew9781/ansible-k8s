@@ -1,4 +1,4 @@
 ---
-- hosts: clone1, clone2, clone3
+- hosts: k8smaster, k8snode1, k8snode2
   roles:
     - ubuntu-k8s-install
