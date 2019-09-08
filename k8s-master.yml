@@ -1,4 +1,0 @@
----
-- hosts: k8smaster
-  roles:
-    - k8s-master
