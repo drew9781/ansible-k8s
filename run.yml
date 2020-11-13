@@ -1,11 +1,13 @@
 ---
 #Install K8s on nodes
 - hosts: k8smaster, k8snode1, k8snode2
+  remote_user: aenglema
   roles:
     - ubuntu-k8s-install
 
 #Set up K8s master
 - hosts: k8smaster
+  remote_user: aenglema
   roles:
     - k8s-master
 
@@ -13,6 +15,7 @@
 # Link workers to master
 - hosts: k8smaster
   become: yes
+  remote_user: aenglema
   gather_facts: false
   tasks: 
   - name: get join command
@@ -25,6 +28,7 @@
 
 - hosts: k8snode1, k8snode2
   become: yes
+  remote_user: aengelma
   tasks: 
     - name: join cluster
       shell: "{{ hostvars['k8smaster'].join_command }} --ignore-preflight-errors all >> node_joined.txt"

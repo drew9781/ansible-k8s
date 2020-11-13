@@ -1,6 +1,6 @@
 ---
 - name: kubeadm init
-  shell: kubeadm init --pod-network-cidr=10.0.0.0/8
+  shell: kubeadm init --pod-network-cidr=192.168.0.0/16
   become: yes
 
 - name: set up kubeadm for non-root
@@ -13,9 +13,9 @@
   become: yes
 
 - name: kubectl apply
-  shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
+  shell: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
 
-- shell: kubectl apply -f https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
+- shell: kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
 
 #- name: get join command
 #  shell: kubeadm token create --print-join-command
