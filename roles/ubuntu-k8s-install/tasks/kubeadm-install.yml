@@ -1,32 +1,26 @@
 ---
-- name: install docker.io
+- name: install docker and curl packages
   apt:
-    name: docker.io
+    name:
+      - docker.io
+      - docker
+      - apt-transport-https
+      - curl
+      - gpg
   become: yes
 
-- name: install docker
-  apt:
-    name: docker
-  become: yes
-
-- service: 
+- name: Enable docker service
+  service: 
     name: docker.service
     enabled: yes
   become: yes
 
-- name: install HTTPS supoort
-  apt:
-    name: apt-transport-https
-  become: yes
-
-- name: install curl
-  apt:
-    name: curl
-  become: yes
-
 - name: retieve key for kubernetes repo
-  shell: "curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -"
   become: yes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  
 
 - name: add kubernetes repo
   apt_repository:
@@ -38,13 +32,8 @@
 
 - name: install kubelet, kubeadm, kubectl
   apt:
-    name: kubelet
-  become: yes
-
-- apt: 
-    name: kubeadm
-  become: yes
-
-- apt:
-    name: kubectl
+    name: 
+      - kubelet
+      - kubeadm
+      - kubectl
   become: yes

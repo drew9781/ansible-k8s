@@ -1,34 +1,19 @@
 ---
 #Install K8s on nodes
-- hosts: k8smaster, k8snode1, k8snode2
+- hosts: k8s
   remote_user: aenglema
   roles:
     - ubuntu-k8s-install
 
 #Set up K8s master
-- hosts: k8smaster
+- hosts: k8s-master
   remote_user: aenglema
+  gather_facts: true
   roles:
     - k8s-master
 
-
-# Link workers to master
-- hosts: k8smaster
-  become: yes
+- hosts: k8s-workers
   remote_user: aenglema
-  gather_facts: false
-  tasks: 
-  - name: get join command
-    shell: kubeadm token create --print-join-command
-    register: join_command_raw
-
-  - name: set join command
-    set_fact:
-      join_command: "{{ join_command_raw.stdout_lines[0] }}"
-
-- hosts: k8snode1, k8snode2
-  become: yes
-  remote_user: aengelma
   tasks: 
     - name: join cluster
       shell: "{{ hostvars['k8smaster'].join_command }} --ignore-preflight-errors all >> node_joined.txt"

@@ -1,27 +1,31 @@
 ---
 - name: kubeadm init
-  shell: kubeadm init --pod-network-cidr=192.168.0.0/16
+  shell: kubeadm init --pod-network-cidr=192.168.0.0/16 >> /root/kubadm-init.txt
+  args:
+    creates: "/root/kubeadm-init.txt"
   become: yes
 
 - name: set up kubeadm for non-root
-  shell: mkdir -p /home/aenglema/.kube
- 
-- shell: cp -i /etc/kubernetes/admin.conf /home/aenglema/.kube/config
+  file:
+    path: "/home/{{ ansible_user_id }}/.kube"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+  
+- name: copy kubectl admin.conf to user
   become: yes
-
-- shell: chown aenglema:aenglema /home/aenglema/.kube/config
-  become: yes
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user_id }}/.kube/config"
+    owner: "{{ ansible_user_id }}"
 
 - name: kubectl apply
-  shell: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml
+  shell: kubectl create -f https://docs.projectcalico.org/manifests/tigera-operator.yaml >> tigera-operator.txt
+  args:
+    chdir: $HOME
+    creates: tigera-operator.txt
 
-- shell: kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml
-
-#- name: get join command
-#  shell: kubeadm token create --print-join-command
-#  register: join_command_raw
-
-#- name: set join command
-#  set_fact:
-#    join_command: "{{ join_command_raw.stdout_lines[0] }}"
-
+- shell: kubectl create -f https://docs.projectcalico.org/manifests/custom-resources.yaml >> custom-resources.txt
+  args:
+    chdir: $HOME
+    creates: custom-resources.txt

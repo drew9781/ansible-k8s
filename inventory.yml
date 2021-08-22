@@ -1,0 +1,13 @@
+all:
+  children:
+    k8s:
+      children:
+        k8s-workers:
+        k8s-master:
+    k8s-workers:
+      hosts:
+        k8snode1:
+        k8snode2:
+    k8s-master:
+      hosts:
+        k8smaster:
